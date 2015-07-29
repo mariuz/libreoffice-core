@@ -761,8 +761,11 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, SelectHdl )
             }
             else
             {
-                m_sPath.clear();
-                m_pName_ed->SetText( "" );
+                if( m_eMode == REMOTEDLG_MODE_OPEN )
+                {
+                    m_sPath.clear();
+                    m_pName_ed->SetText( "" );
+                }
             }
 
             EnableControls();
@@ -887,24 +890,10 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl )
 
     bool bExists = false;
 
-    Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    Reference< XInteractionHandler > xInteractionHandler(
-                    InteractionHandler::createWithParent( xContext, 0 ), UNO_QUERY_THROW );
-    Reference< XCommandEnvironment > xEnv = new ::ucbhelper::CommandEnvironment(
-                    xInteractionHandler, Reference< XProgressHandler >() );
-    ::ucbhelper::Content m_aContent( m_sPath, xEnv, xContext );
-
-    try
-    {
-        if( bFileDlg )
-            bExists = m_aContent.isDocument();
-        else
-            bExists = m_aContent.isFolder();
-    }
-    catch( const Exception& )
-    {
-        bExists = false;
-    }
+    if( bFileDlg )
+        bExists = ContentIsDocument(m_sPath);
+    else
+        bExists = ContentIsFolder(m_sPath);
 
     if ( bExists )
     {
@@ -920,6 +909,8 @@ IMPL_LINK_NOARG ( RemoteFilesDialog, OkHdl )
     else
     {
         if( m_eMode == REMOTEDLG_MODE_OPEN )
+            return 0;
+        if( m_eMode == REMOTEDLG_MODE_SAVE && ContentIsFolder(m_sPath) )
             return 0;
     }
 
