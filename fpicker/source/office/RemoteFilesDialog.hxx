@@ -129,6 +129,7 @@ private:
 
     OUString m_sPath;
     OUString m_sStdDir;
+    OUString m_sRootLabel;
     OUString m_sLastServiceUrl;
     unsigned int m_nCurrentFilter;
 
