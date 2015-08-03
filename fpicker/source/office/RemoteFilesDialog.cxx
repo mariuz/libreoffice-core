@@ -818,7 +818,8 @@ IMPL_LINK_NOARG( RemoteFilesDialog, FileNameGetFocusHdl )
 IMPL_LINK_NOARG( RemoteFilesDialog, FileNameModifyHdl )
 {
     m_pFileView->SetNoSelection();
-    EnableControls();
+    if( !m_pOk_btn->IsEnabled() )
+        EnableControls();
 
     return 1;
 }
