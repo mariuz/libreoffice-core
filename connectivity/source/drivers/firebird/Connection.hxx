@@ -74,8 +74,8 @@ namespace connectivity
              /**
              * Location within the .odb that an embedded .fdb will be stored.
              * Only relevant for embedded dbs.
-             */
-            static const OUString our_sDBLocation;
+             */            
+            static const OUString our_sFBKLocation;
         protected:
             ::osl::Mutex        m_aMutex;
 
@@ -115,10 +115,31 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >
                 m_xEmbeddedStorage;
             /**
-             * The temporary folder where we extract the .fdb from a .odb.
+            * The temporary folder where we extract the .fbk from a .odb,
+             * and also store the temporary .fdb
              * It is only valid if m_bIsEmbedded is true.
+             *
+             * The extracted .fbk is written in firebird.fbk, the temporary
+             * .fdb is stored as firebird.fdb.
              */
-            ::boost::scoped_ptr< ::utl::TempFile >  m_pExtractedFDBFile;
+            ::boost::scoped_ptr< ::utl::TempFile >  m_pDatabaseFileDir;
+            /**
+             * Path for our extracted .fbk file.
+             *
+             * (The temporary .fdb is our m_sFirebirdURL.)
+             */
+            ::rtl::OUString m_sFBKPath;
+
+            /**
+             * Run the backup service, use nAction =
+             * isc_action_svc_backup to backup, nAction = isc_action_svc_restore
+             * to restore.
+             */
+            void runBackupService(const short nAction);
+
+            isc_svc_handle attachServiceManager();
+
+            void detachServiceManager(isc_svc_handle pServiceHandle);
 
 
             /** We are using an external (local) file */
