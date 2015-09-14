@@ -298,13 +298,8 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
             }
         }
 
-        if (m_bIsEmbedded) // Add DocumentEventListener to save the .fdb as needed
-        {
-            // TODO: this is only needed when we change icu versions, so ideally
-            // we somehow keep track of which icu version we have. There might
-            // be something db internal that we can check, or we might have to store
-            // it in the .odb.
-            rebuildIndexes();
+        if (m_bIsEmbedded) // Add DocumentEventListener to save the .fdb as needed       {
+
 
             // We need to attach as a document listener in order to be able to store
             // the temporary db back into the .odb when saving
