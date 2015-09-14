@@ -298,7 +298,8 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
             }
         }
 
-        if (m_bIsEmbedded) // Add DocumentEventListener to save the .fdb as needed       {
+        if (m_bIsEmbedded) // Add DocumentEventListener to save the .fdb as needed
+        {
 
 
             // We need to attach as a document listener in order to be able to store
